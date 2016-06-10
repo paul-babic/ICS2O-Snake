@@ -11,6 +11,7 @@ import java.util.Random;
 final int BOX_SIZE = 20;
 final int GRID_SIZE = 20;
 final int SIDE_SPACE = 20;
+final int FRAME_RATE = 10;
 
 int gameState;
 LinkedList<Point> snake = new LinkedList(); // contains points found in the snake
@@ -20,7 +21,7 @@ int score;
 Random n = new Random();
 
 void setup() {
-  frameRate(10);
+  frameRate(FRAME_RATE);
   gameState=GameStates.START;
   surface.setResizable(false); // size is NOT dynamic
   surface.setSize(BOX_SIZE*GRID_SIZE+2*SIDE_SPACE, BOX_SIZE*GRID_SIZE+2*SIDE_SPACE); // set height and width to 440 x 440 pixels
@@ -30,8 +31,8 @@ void init(){
   snake.add(new Point(10, 10)); // make snake one box long to start, x:10 y:10
   direction = Directions.EAST;
   score = 0;
-  fruit.setX(n.nextInt(20)+1); // random number, max: 20 min: 1
-  fruit.setY(n.nextInt(20)+1);
+  fruit.setX(n.nextInt(GRID_SIZE)+1); // random number, max: GRID_SIZE min: 1
+  fruit.setY(n.nextInt(GRID_SIZE)+1);
 }
 
 void reset(){
@@ -52,7 +53,7 @@ void play(){
     gameState = GameStates.END;
   }
   if(checkFruitCollected()){
-    score++;
+    score+=10;
     switch(direction){
       case Directions.NORTH:
       snake.add(new Point(snake.getLast().getX(),snake.getLast().getY()-1));break;
@@ -63,6 +64,7 @@ void play(){
       case Directions.WEST:
       snake.add(new Point(snake.getLast().getX()-1,snake.getLast().getY()));break;
     }
+    log(score);
     fruit.setX(n.nextInt(20)+1);
     fruit.setY(n.nextInt(20)+1);
   }
@@ -139,22 +141,22 @@ void drawSnake() {
   stroke(255,255,255);
   fill(0,255,0);
   for(int i=0; i<snake.size();i++){ // iterate through points on snake
-    rect(snake.get(i).getX()*GRID_SIZE,snake.get(i).getY()*GRID_SIZE,BOX_SIZE,BOX_SIZE); // args 1&2- place at intervals of 20px, args 3&4- width: 20px height: 20px
+    rect(snake.get(i).getX()*BOX_SIZE,snake.get(i).getY()*BOX_SIZE,BOX_SIZE,BOX_SIZE); // args 1&2- place at intervals of 20px, args 3&4- width: 20px height: 20px
   }
 }
 
 void drawFruit(){
   stroke(255,255,255);
   fill(255,0,0);
-  ellipse(fruit.getX()*GRID_SIZE+BOX_SIZE/2,fruit.getY()*GRID_SIZE+BOX_SIZE/2,BOX_SIZE,BOX_SIZE);
+  ellipse(fruit.getX()*BOX_SIZE+BOX_SIZE/2,fruit.getY()*BOX_SIZE+BOX_SIZE/2,BOX_SIZE,BOX_SIZE);
 };
 
 void drawBoundaries() {
   stroke(255, 0, 0); // set color to red
-  line(20, 20, 20, 420); // west
-  line(20, 20, 420, 20); // north
-  line(20, 420, 420, 420); // south
-  line(420, 20, 420, 420); // east
+  line(SIDE_SPACE, SIDE_SPACE, SIDE_SPACE, GRID_SIZE*BOX_SIZE+BOX_SIZE); // west
+  line(SIDE_SPACE, SIDE_SPACE, GRID_SIZE*BOX_SIZE+BOX_SIZE, SIDE_SPACE); // north
+  line(SIDE_SPACE, GRID_SIZE*BOX_SIZE+BOX_SIZE, GRID_SIZE*BOX_SIZE+BOX_SIZE, GRID_SIZE*BOX_SIZE+BOX_SIZE); // south
+  line(GRID_SIZE*BOX_SIZE+BOX_SIZE, SIDE_SPACE, GRID_SIZE*BOX_SIZE+BOX_SIZE, GRID_SIZE*BOX_SIZE+BOX_SIZE); // east
 }
 
 void debugGrid() {
