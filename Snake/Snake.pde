@@ -16,7 +16,8 @@ final int FRAME_RATE = 10;
 int gameState;
 LinkedList<Point> snake = new LinkedList(); // contains points found in the snake
 Point fruit = new Point(1,1); // the x/y coordinates of the fruit
-int direction = Directions.NO_DIRECTION;
+int previousDirection = Directions.NO_DIRECTION;
+int direction = Directions.EAST;
 int score;
 Random n = new Random();
 
@@ -29,7 +30,6 @@ void setup() {
 
 void init(){
   snake.add(new Point(10, 10)); // make snake one box long to start, x:10 y:10
-  direction = Directions.EAST;
   score = 0;
   fruit.setX(n.nextInt(GRID_SIZE)+1); // random number, max: GRID_SIZE min: 1
   fruit.setY(n.nextInt(GRID_SIZE)+1);
@@ -40,7 +40,6 @@ void reset(){
 }
 
 void start(){
-  
 }
 
 void play(){
@@ -64,13 +63,21 @@ void play(){
       case Directions.WEST:
       snake.add(new Point(snake.getLast().getX()-1,snake.getLast().getY()));break;
     }
-    log(score);
+    // println(score); // used for debugging only
     fruit.setX(n.nextInt(20)+1);
     fruit.setY(n.nextInt(20)+1);
   }
+  text("Score: "+score,10,10);
 }
 
 void end(){
+  textSize(64);
+  text("GAME OVER",10,60);
+  textSize(18);
+  text("Score: "+score,50,120);
+  textSize(12);
+  delay(1500);
+  text("Press any key to continue...",160,280);
   
 }
 
@@ -91,10 +98,11 @@ void keyPressed(){
     case GameStates.START:
     gameState = GameStates.PLAY;init();break;
     case GameStates.PLAY:
-    if(keyCode==UP){direction=Directions.NORTH;}
-    else if(keyCode==DOWN){direction=Directions.SOUTH;}
-    else if(keyCode==LEFT){direction=Directions.WEST;}
-    else if(keyCode==RIGHT){direction=Directions.EAST;}break;
+    previousDirection=direction;
+    if(keyCode==UP&&previousDirection!=Directions.SOUTH){direction=Directions.NORTH;}
+    else if(keyCode==DOWN&&previousDirection!=Directions.NORTH){direction=Directions.SOUTH;}
+    else if(keyCode==LEFT&&previousDirection!=Directions.EAST){direction=Directions.WEST;}
+    else if(keyCode==RIGHT&&previousDirection!=Directions.WEST){direction=Directions.EAST;}break;
     case GameStates.END:
     gameState = GameStates.START;reset();break;
   }
