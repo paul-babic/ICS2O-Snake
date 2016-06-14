@@ -7,7 +7,7 @@
 import java.util.LinkedList;
 import java.util.Random;
  
-// game constants
+// game constants, used to make sizing dynamic... WORK IN PROGRESS
 final int BOX_SIZE = 20;
 final int GRID_SIZE = 20;
 final int SIDE_SPACE = 20;
