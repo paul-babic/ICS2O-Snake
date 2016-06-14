@@ -42,8 +42,9 @@ void reset(){
 void start(){
 }
 
+/* Main game loop */
 void play(){
-  debugGrid();
+  debugGrid(); // Used for debugging only
   drawBoundaries();
   drawSnake();
   drawFruit();
@@ -64,12 +65,22 @@ void play(){
       snake.add(new Point(snake.getLast().getX()-1,snake.getLast().getY()));break;
     }
     // println(score); // used for debugging only
-    fruit.setX(n.nextInt(20)+1);
-    fruit.setY(n.nextInt(20)+1);
+    int randomX = n.nextInt(20)+1; // random x coordinate used for fruit
+    int randomY = n.nextInt(20)+1; // random y coordainte used for fruit
+    for(int i=0;i<snake.size();i++){
+      if(snake.get(i).getX()!=randomX&&snake.get(i).getY()!=randomY){ // Make sure fruit will not be placed on a point already occupied by snake
+        fruit.setX(randomX);
+        fruit.setY(randomY);
+      } else { // choose new random variables
+        randomX = n.nextInt(GRID_SIZE)+1; 
+        randomY = n.nextInt(GRID_SIZE)+1; 
+      }
+    }
   }
   text("Score: "+score,10,10);
 }
 
+/* Game over screen */
 void end(){
   textSize(64);
   text("GAME OVER",10,60);
@@ -108,6 +119,7 @@ void keyPressed(){
   }
 }
 
+/* Moves the snake one point in 'direction' direction */
 void move(){
   switch(direction){
     case Directions.NORTH:
@@ -122,6 +134,7 @@ void move(){
   snake.removeLast(); // remove last node in snake
 }
 
+/* Checks to see if the snake has collected the fruit */
 boolean checkFruitCollected(){
   for(int i=0;i<snake.size(); i++){
     if(snake.get(i).getX()==fruit.getX()&&snake.get(i).getY()==fruit.getY()){return true;} // return true if x and y values are the same
@@ -129,6 +142,7 @@ boolean checkFruitCollected(){
   return false;
 }
 
+/* Checks to see if the snake has collided with itself */
 boolean checkCollision(){ // check to see if the snake has collided with itself using nested for-loop
   for(int i=0; i<snake.size();i++){
     for(int j=0; j<snake.size(); j++){
@@ -138,6 +152,7 @@ boolean checkCollision(){ // check to see if the snake has collided with itself 
   return false;
 }
 
+/* Checks if the snake has exited the boundaries */
 boolean checkOOB(){ // OOB = out of bounds
   for(int i=0;i<snake.size(); i++){
     if(snake.get(i).getX()>GRID_SIZE||snake.get(i).getX()<1||snake.get(i).getY()>GRID_SIZE||snake.get(i).getY()<1){return true;}
@@ -145,6 +160,7 @@ boolean checkOOB(){ // OOB = out of bounds
   return false;
 }
 
+/* Iterates through each element of 'snake' and draws a square at each point on the screen */
 void drawSnake() {
   stroke(255,255,255);
   fill(0,255,0);
@@ -153,12 +169,14 @@ void drawSnake() {
   }
 }
 
+/* Draws the fruit ellipse at the x/y coordinates specified in 'fruit' */
 void drawFruit(){
   stroke(255,255,255);
   fill(255,0,0);
   ellipse(fruit.getX()*BOX_SIZE+BOX_SIZE/2,fruit.getY()*BOX_SIZE+BOX_SIZE/2,BOX_SIZE,BOX_SIZE);
 };
 
+/* Draws the red boundaries enclosing the snake */
 void drawBoundaries() {
   stroke(255, 0, 0); // set color to red
   line(SIDE_SPACE, SIDE_SPACE, SIDE_SPACE, GRID_SIZE*BOX_SIZE+BOX_SIZE); // west
@@ -167,6 +185,7 @@ void drawBoundaries() {
   line(GRID_SIZE*BOX_SIZE+BOX_SIZE, SIDE_SPACE, GRID_SIZE*BOX_SIZE+BOX_SIZE, GRID_SIZE*BOX_SIZE+BOX_SIZE); // east
 }
 
+/* Draws a grid within the red boundaries, used for debugging only */
 void debugGrid() {
   stroke(255, 255, 255); // set color to white
   for (int i=0; i<=BOX_SIZE*GRID_SIZE; i+=BOX_SIZE) {
