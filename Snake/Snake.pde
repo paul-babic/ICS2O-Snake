@@ -55,32 +55,34 @@ void reset(){
 }
 
 void start1(){ // start is reserved word
-  if(!musicStarted){
-    musicLoopStart.loop();
-    musicStarted=true;
-  }
   fill(255,0,0);
   textSize(64);
   text("SNAKE",10,60);
   textSize(18);
   text("V1.0 by Pauly B",50,120);
   text("Use the arrow keys (↑ ↓ ← →) to move",100,200);
-  textSize(12);
+  textSize(10);
+  text("\"very snake\"",225,350);
   image(doge,300,300);
   delay(1500);
+  textSize(12);
   text("Press the space bar to continue...",160,280);
+  if(!musicStarted){
+    musicLoopStart.loop();
+    musicStarted=true;
+  }
 }
 
 /* Main game loop */
 void play(){
   musicLoopStart.stop();musicStarted=false; // stop music from start screen completely, reset music started variable
-  // debugGrid(); // Used for debugging only
-  drawBoundaries();
-  drawSnake();
-  drawFruit();
-  move();
   if((checkCollision()||checkOOB())){
     dead.play();
+    image(doge,300,300);
+    textAlign(CENTER);
+    text("has died.",200,200);
+    textAlign(LEFT);
+    delay(1500); // delay before end screen
     gameState = GameStates.END;
   }
   if(checkFruitCollected()){
@@ -106,8 +108,13 @@ void play(){
       }
     }
     fruit.setX(randomX);
-        fruit.setY(randomY);
+    fruit.setY(randomY);
   }
+  // debugGrid(); // Used for debugging only
+  drawBoundaries();
+  drawSnake();
+  drawFruit();
+  move();
   text("Score: "+score,10,10);
 }
 

@@ -75,31 +75,34 @@ public void reset(){
 }
 
 public void start1(){ // start is reserved word
-  if(!musicStarted){
-    musicLoopStart.loop();
-    musicStarted=true;
-  }
   fill(255,0,0);
   textSize(64);
   text("SNAKE",10,60);
   textSize(18);
   text("V1.0 by Pauly B",50,120);
-  textSize(12);
+  text("Use the arrow keys (\u2191 \u2193 \u2190 \u2192) to move",100,200);
+  textSize(10);
+  text("\"very snake\"",225,350);
   image(doge,300,300);
   delay(1500);
-  text("Press any key to continue...",160,280);
+  textSize(12);
+  text("Press the space bar to continue...",160,280);
+  if(!musicStarted){
+    musicLoopStart.loop();
+    musicStarted=true;
+  }
 }
 
 /* Main game loop */
 public void play(){
   musicLoopStart.stop();musicStarted=false; // stop music from start screen completely, reset music started variable
-  // debugGrid(); // Used for debugging only
-  drawBoundaries();
-  drawSnake();
-  drawFruit();
-  move();
   if((checkCollision()||checkOOB())){
     dead.play();
+    image(doge,300,300);
+    textAlign(CENTER);
+    text("has died.",200,200);
+    textAlign(LEFT);
+    delay(1500); // delay before end screen
     gameState = GameStates.END;
   }
   if(checkFruitCollected()){
@@ -125,20 +128,29 @@ public void play(){
       }
     }
     fruit.setX(randomX);
-        fruit.setY(randomY);
+    fruit.setY(randomY);
   }
+  // debugGrid(); // Used for debugging only
+  drawBoundaries();
+  drawSnake();
+  drawFruit();
+  move();
   text("Score: "+score,10,10);
 }
 
 /* Game over screen */
 public void end(){
+  // STOP ALL SOUNDS
+  dead.stop();
+  fruitEaten.stop();
+  musicLoopStart.stop();
   textSize(64);
   text("GAME OVER",10,60);
   textSize(18);
   text("Score: "+score,50,120);
   textSize(12);
   delay(1500);
-  text("Press any key to continue...",160,280);
+  text("Press the space bar to continue...",160,280);
   
 }
 
@@ -157,7 +169,7 @@ public void draw() {
 public void keyPressed(){
   switch(gameState){
     case GameStates.START:
-    gameState = GameStates.PLAY;init();break;
+    if(key==' '){gameState = GameStates.PLAY;init();}break;
     case GameStates.PLAY:
     previousDirection=direction;
     if(keyCode==UP&&previousDirection!=Directions.SOUTH){direction=Directions.NORTH;}
@@ -165,7 +177,7 @@ public void keyPressed(){
     else if(keyCode==LEFT&&previousDirection!=Directions.EAST){direction=Directions.WEST;}
     else if(keyCode==RIGHT&&previousDirection!=Directions.WEST){direction=Directions.EAST;}break;
     case GameStates.END:
-    gameState = GameStates.START;reset();break;
+    if(key==' '){gameState = GameStates.START;reset();}break;
   }
 }
 
