@@ -13,8 +13,9 @@ final int BOX_SIZE = 20;
 final int GRID_SIZE = 20;
 final int SIDE_SPACE = 20;
 final int FRAME_RATE = 10;
-final SoundFile dead = new SoundFile(this, "dead.mp3");
-final SoundFile fruitEaten = new SoundFile(this, "fruit.mp3");
+
+SoundFile dead;
+SoundFile fruitEaten;
 
 int gameState;
 LinkedList<Point> snake = new LinkedList(); // contains points found in the snake
@@ -30,6 +31,8 @@ void setup() {
   gameState=GameStates.START;
   surface.setResizable(false); // size is NOT dynamic
   surface.setSize(BOX_SIZE*GRID_SIZE+2*SIDE_SPACE, BOX_SIZE*GRID_SIZE+2*SIDE_SPACE); // set height and width to 440 x 440 pixels
+  dead = new SoundFile(this, "dead.mp3");
+  fruitEaten = new SoundFile(this, "fruit.mp3");
 }
 
 void init(){
