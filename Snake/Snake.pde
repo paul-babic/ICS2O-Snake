@@ -14,8 +14,11 @@ final int GRID_SIZE = 20;
 final int SIDE_SPACE = 20;
 final int FRAME_RATE = 10;
 
-SoundFile dead;
-SoundFile fruitEaten;
+SoundFile dead; // http://soundbible.com/1570-Death.html
+SoundFile fruitEaten; // http://soundbible.com/1968-Apple-Bite.html
+SoundFile musicLoopStart; // http://www.playonloop.com/2016-music-loops/dolphin-ride/
+
+boolean musicStarted; // used so music file does not start every frame
 
 int gameState;
 LinkedList<Point> snake = new LinkedList(); // contains points found in the snake
@@ -33,6 +36,8 @@ void setup() {
   surface.setSize(BOX_SIZE*GRID_SIZE+2*SIDE_SPACE, BOX_SIZE*GRID_SIZE+2*SIDE_SPACE); // set height and width to 440 x 440 pixels
   dead = new SoundFile(this, "dead.mp3");
   fruitEaten = new SoundFile(this, "fruit.mp3");
+  musicLoopStart = new SoundFile(this, "start.mp3");
+  musicStarted = false; // startup music has not started
 }
 
 void init(){
@@ -46,11 +51,23 @@ void reset(){
   snake = new LinkedList(); // remove all points found on previous snake
 }
 
-void start(){
+void start1(){ // start is reserved word
+  if(!musicStarted){
+    musicLoopStart.loop();
+    musicStarted=true;
+  }
+  textSize(64);
+  text("SNAKE",10,60);
+  textSize(18);
+  text("By Pauly B",50,120);
+  textSize(12);
+  delay(1500);
+  text("Press any key to continue...",160,280);
 }
 
 /* Main game loop */
 void play(){
+  musicLoopStart.stop();musicStarted=false; // stop music from start screen completely, reset music started variable
   debugGrid(); // Used for debugging only
   drawBoundaries();
   drawSnake();
@@ -106,7 +123,7 @@ void draw() {
     case GameStates.PLAY:
     play();break;
     case GameStates.START:
-    start();break;
+    start1();break;
     case GameStates.END:
     end();break;
   }
