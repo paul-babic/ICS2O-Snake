@@ -64,10 +64,11 @@ void start1(){ // start is reserved word
   text("SNAKE",10,60);
   textSize(18);
   text("V1.0 by Pauly B",50,120);
+  text("Use the arrow keys (↑ ↓ ← →) to move",100,200);
   textSize(12);
   image(doge,300,300);
   delay(1500);
-  text("Press any key to continue...",160,280);
+  text("Press the space bar to continue...",160,280);
 }
 
 /* Main game loop */
@@ -112,13 +113,17 @@ void play(){
 
 /* Game over screen */
 void end(){
+  // STOP ALL SOUNDS
+  dead.stop();
+  fruitEaten.stop();
+  musicLoopStart.stop();
   textSize(64);
   text("GAME OVER",10,60);
   textSize(18);
   text("Score: "+score,50,120);
   textSize(12);
   delay(1500);
-  text("Press any key to continue...",160,280);
+  text("Press the space bar to continue...",160,280);
   
 }
 
@@ -137,7 +142,7 @@ void draw() {
 void keyPressed(){
   switch(gameState){
     case GameStates.START:
-    gameState = GameStates.PLAY;init();break;
+    if(key==' '){gameState = GameStates.PLAY;init();}break;
     case GameStates.PLAY:
     previousDirection=direction;
     if(keyCode==UP&&previousDirection!=Directions.SOUTH){direction=Directions.NORTH;}
@@ -145,7 +150,7 @@ void keyPressed(){
     else if(keyCode==LEFT&&previousDirection!=Directions.EAST){direction=Directions.WEST;}
     else if(keyCode==RIGHT&&previousDirection!=Directions.WEST){direction=Directions.EAST;}break;
     case GameStates.END:
-    gameState = GameStates.START;reset();break;
+    if(key==' '){gameState = GameStates.START;reset();}break;
   }
 }
 
