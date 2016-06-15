@@ -56,6 +56,7 @@ void start1(){ // start is reserved word
     musicLoopStart.loop();
     musicStarted=true;
   }
+  stroke(255,0,0);
   textSize(64);
   text("SNAKE",10,60);
   textSize(18);
