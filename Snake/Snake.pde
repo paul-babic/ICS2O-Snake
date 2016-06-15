@@ -21,6 +21,8 @@ int direction = Directions.EAST;
 int score;
 Random n = new Random();
 
+int randomX; int randomY; // to be used as determining points for fruit
+
 void setup() {
   frameRate(FRAME_RATE);
   gameState=GameStates.START;
@@ -31,8 +33,8 @@ void setup() {
 void init(){
   snake.add(new Point(10, 10)); // make snake one box long to start, x:10 y:10
   score = 0;
-  fruit.setX(n.nextInt(GRID_SIZE)+1); // random number, max: GRID_SIZE min: 1
-  fruit.setY(n.nextInt(GRID_SIZE)+1);
+  fruit.setX(n.nextInt(20)+1); // random number, max: GRID_SIZE min: 1
+  fruit.setY(n.nextInt(20)+1);
 }
 
 void reset(){
@@ -49,7 +51,7 @@ void play(){
   drawSnake();
   drawFruit();
   move();
-  if(checkCollision()||checkOOB()){
+  if((checkCollision()||checkOOB())){
     gameState = GameStates.END;
   }
   if(checkFruitCollected()){
@@ -65,17 +67,16 @@ void play(){
       snake.add(new Point(snake.getLast().getX()-1,snake.getLast().getY()));break;
     }
     // println(score); // used for debugging only
-    int randomX = n.nextInt(20)+1; // random x coordinate used for fruit
-    int randomY = n.nextInt(20)+1; // random y coordainte used for fruit
+    randomX = n.nextInt(20)+1; // random x coordinate used for fruit
+    randomY = n.nextInt(20)+1; // random y coordainte used for fruit
     for(int i=0;i<snake.size();i++){
-      if(snake.get(i).getX()!=randomX&&snake.get(i).getY()!=randomY){ // Make sure fruit will not be placed on a point already occupied by snake
-        fruit.setX(randomX);
-        fruit.setY(randomY);
-      } else { // choose new random variables
-        randomX = n.nextInt(GRID_SIZE)+1; 
-        randomY = n.nextInt(GRID_SIZE)+1; 
+      if(snake.get(i).getX()==randomX&&snake.get(i).getY()==randomY){ // Make sure fruit will not be placed on a point already occupied by snake
+        randomX = n.nextInt(20)+1;
+        randomY = n.nextInt(20)+1;
       }
     }
+    fruit.setX(randomX);
+        fruit.setY(randomY);
   }
   text("Score: "+score,10,10);
 }
