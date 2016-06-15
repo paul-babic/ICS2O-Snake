@@ -14,9 +14,11 @@ final int GRID_SIZE = 20;
 final int SIDE_SPACE = 20;
 final int FRAME_RATE = 10;
 
+// Media files
 SoundFile dead; // http://soundbible.com/1570-Death.html
 SoundFile fruitEaten; // http://soundbible.com/1968-Apple-Bite.html
 SoundFile musicLoopStart; // http://www.playonloop.com/2016-music-loops/dolphin-ride/
+PImage doge; // http://static.memecdn.com/images/avatars/s_1138629_527bd33a08cd9.jpg
 
 boolean musicStarted; // used so music file does not start every frame
 
@@ -38,6 +40,7 @@ void setup() {
   fruitEaten = new SoundFile(this, "fruit.mp3");
   musicLoopStart = new SoundFile(this, "start.mp3");
   musicStarted = false; // startup music has not started
+  doge = loadImage("doge.jpg");
 }
 
 void init(){
@@ -56,12 +59,13 @@ void start1(){ // start is reserved word
     musicLoopStart.loop();
     musicStarted=true;
   }
-  stroke(255,0,0);
+  fill(255,0,0);
   textSize(64);
   text("SNAKE",10,60);
   textSize(18);
   text("V1.0 by Pauly B",50,120);
   textSize(12);
+  image(doge,300,300);
   delay(1500);
   text("Press any key to continue...",160,280);
 }
@@ -69,7 +73,7 @@ void start1(){ // start is reserved word
 /* Main game loop */
 void play(){
   musicLoopStart.stop();musicStarted=false; // stop music from start screen completely, reset music started variable
-  debugGrid(); // Used for debugging only
+  // debugGrid(); // Used for debugging only
   drawBoundaries();
   drawSnake();
   drawFruit();
