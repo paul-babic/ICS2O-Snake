@@ -60,7 +60,7 @@ void start1(){ // start is reserved word
   textSize(64);
   text("SNAKE",10,60);
   textSize(18);
-  text("By Pauly B",50,120);
+  text("V1.0 by Pauly B",50,120);
   textSize(12);
   delay(1500);
   text("Press any key to continue...",160,280);
