@@ -6,12 +6,15 @@
  
 import java.util.LinkedList;
 import java.util.Random;
+import processing.sound.SoundFile;
  
 // game constants, used to make sizing dynamic... WORK IN PROGRESS
 final int BOX_SIZE = 20;
 final int GRID_SIZE = 20;
 final int SIDE_SPACE = 20;
 final int FRAME_RATE = 10;
+final SoundFile dead = new SoundFile(this, "dead.mp3");
+final SoundFile fruitEaten = new SoundFile(this, "fruit.mp3");
 
 int gameState;
 LinkedList<Point> snake = new LinkedList(); // contains points found in the snake
@@ -20,7 +23,6 @@ int previousDirection = Directions.NO_DIRECTION;
 int direction = Directions.EAST;
 int score;
 Random n = new Random();
-
 int randomX; int randomY; // to be used as determining points for fruit
 
 void setup() {
@@ -52,9 +54,11 @@ void play(){
   drawFruit();
   move();
   if((checkCollision()||checkOOB())){
+    dead.play();
     gameState = GameStates.END;
   }
   if(checkFruitCollected()){
+    fruitEaten.play();
     score+=10;
     switch(direction){
       case Directions.NORTH:
